@@ -1,0 +1,1 @@
+Developed as a trial project for Candor Services

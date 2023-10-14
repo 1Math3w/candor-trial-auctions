@@ -1,0 +1,4 @@
+name: Auctions
+main: dev.math3w.auctions.AuctionsPlugin
+version: 1.0
+author: _Math3w_
