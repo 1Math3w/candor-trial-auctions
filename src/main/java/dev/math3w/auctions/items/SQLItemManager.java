@@ -38,7 +38,8 @@ public class SQLItemManager implements ItemManager {
                 "id INTEGER PRIMARY KEY " + autoIncrementSyntax + ", " +
                 "item TEXT NOT NULL, " +
                 "price INTEGER NOT NULL, " +
-                "player VARCHAR(36) NOT NULL, " +
+                "player_uuid VARCHAR(36) NOT NULL, " +
+                "player_name VARCHAR(36) NOT NULL, " +
                 "buyer VARCHAR(36) DEFAULT NULL, " +
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);")) {
             statement.executeUpdate();
@@ -48,13 +49,14 @@ public class SQLItemManager implements ItemManager {
     }
 
     @Override
-    public CompletableFuture<Void> addItem(AuctionItem order) {
+    public CompletableFuture<Void> addItem(AuctionItem item) {
         return CompletableFuture.runAsync(() -> {
-            try (PreparedStatement statement = sqlDatabase.getConnection().prepareStatement("INSERT INTO items (item, price, player) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)")) {
-                statement.setString(1, Utils.serializeItem(order.item()));
-                statement.setInt(2, order.price());
-                statement.setString(3, String.valueOf(order.playerUniqueId()));
+            try (PreparedStatement statement = sqlDatabase.getConnection().prepareStatement("INSERT INTO items (item, price, player_uuid, player_name) " +
+                    "VALUES (?, ?, ?, ?)")) {
+                statement.setString(1, Utils.serializeItem(item.item()));
+                statement.setInt(2, item.price());
+                statement.setString(3, String.valueOf(item.playerUniqueId()));
+                statement.setString(4, item.playerName());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -83,7 +85,8 @@ public class SQLItemManager implements ItemManager {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         items.add(new AuctionItem(resultSet.getInt("id"),
-                                UUID.fromString(resultSet.getString("player")),
+                                UUID.fromString(resultSet.getString("player_uuid")),
+                                resultSet.getString("player_name"),
                                 Utils.deserializeItem(resultSet.getString("item")),
                                 resultSet.getInt("price")));
                     }

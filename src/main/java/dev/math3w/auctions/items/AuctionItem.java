@@ -7,17 +7,19 @@ import java.util.UUID;
 
 public final class AuctionItem {
     private final UUID playerUniqueId;
+    private final String playerName;
     private final ItemStack item;
     private final int price;
     private int databaseId = -1;
 
-    public AuctionItem(int databaseId, UUID playerUniqueId, ItemStack item, int price) {
-        this(playerUniqueId, item, price);
+    public AuctionItem(int databaseId, UUID playerUniqueId, String playerName, ItemStack item, int price) {
+        this(playerUniqueId, playerName, item, price);
         this.databaseId = databaseId;
     }
 
-    public AuctionItem(UUID playerUniqueId, ItemStack item, int price) {
+    public AuctionItem(UUID playerUniqueId, String playerName, ItemStack item, int price) {
         this.playerUniqueId = playerUniqueId;
+        this.playerName = playerName;
         this.item = item;
         this.price = price;
     }
@@ -28,6 +30,10 @@ public final class AuctionItem {
 
     public UUID playerUniqueId() {
         return playerUniqueId;
+    }
+
+    public String playerName() {
+        return playerName;
     }
 
     public ItemStack item() {
