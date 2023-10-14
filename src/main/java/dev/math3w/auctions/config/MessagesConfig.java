@@ -31,8 +31,9 @@ public class MessagesConfig extends CustomConfig {
     protected void addDefaults() {
         addDefault("sell.no-item", "&cYou're not holding any item in your hand!");
         addDefault("sell.invalid-price", "&cThe price you entered is not valid!");
-        addDefault("sell.success", "&aYour item has been successfully auctioned for %price%!");
+        addDefault("sell.success", "&aYour item has been successfully auctioned for $%price%!");
         addDefault("buy.not-enough", "&cYou don't have enough money to purchase this item!");
-        addDefault("buy.success", "&aYou have successfully purchased an item for %price%!");
+        addDefault("buy.success", "&aYou have successfully purchased an item for $%price%!");
+        addDefault("menu.title", "&6Auctions");
     }
 }

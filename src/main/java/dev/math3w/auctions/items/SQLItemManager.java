@@ -80,15 +80,16 @@ public class SQLItemManager implements ItemManager {
     @Override
     public CompletableFuture<List<AuctionItem>> getItems() {
         return CompletableFuture.supplyAsync(() -> {
-            try (PreparedStatement statement = sqlDatabase.getConnection().prepareStatement("SELECT * FROM items WHERE buyer=NULL ORDER BY created_at DESC")) {
+            try (PreparedStatement statement = sqlDatabase.getConnection().prepareStatement("SELECT * FROM items WHERE buyer IS NULL ORDER BY created_at DESC")) {
                 List<AuctionItem> items = new ArrayList<>();
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        items.add(new AuctionItem(resultSet.getInt("id"),
+                        AuctionItem item = new AuctionItem(resultSet.getInt("id"),
                                 UUID.fromString(resultSet.getString("player_uuid")),
                                 resultSet.getString("player_name"),
                                 Utils.deserializeItem(resultSet.getString("item")),
-                                resultSet.getInt("price")));
+                                resultSet.getInt("price"));
+                        items.add(item);
                     }
                 }
 
