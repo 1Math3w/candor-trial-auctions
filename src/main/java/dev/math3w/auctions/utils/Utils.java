@@ -1,7 +1,14 @@
 package dev.math3w.auctions.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,5 +30,31 @@ public class Utils {
         }
 
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static String serializeItem(ItemStack itemStack) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream)) {
+
+            dataOutput.writeObject(itemStack);
+            byte[] byteArray = outputStream.toByteArray();
+
+            return Base64.getEncoder().encodeToString(byteArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ItemStack deserializeItem(String base64String) {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(base64String));
+             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream)) {
+            return (ItemStack) dataInput.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

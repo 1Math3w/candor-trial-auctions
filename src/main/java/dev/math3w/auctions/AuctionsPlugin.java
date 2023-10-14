@@ -3,6 +3,8 @@ package dev.math3w.auctions;
 import dev.math3w.auctions.commands.AuctionsCommand;
 import dev.math3w.auctions.config.DatabaseConfig;
 import dev.math3w.auctions.config.MessagesConfig;
+import dev.math3w.auctions.items.ItemManager;
+import dev.math3w.auctions.items.SQLItemManager;
 import me.zort.containr.Containr;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -13,6 +15,7 @@ public class AuctionsPlugin extends JavaPlugin {
     private Economy economy = null;
     private MessagesConfig messagesConfig;
     private DatabaseConfig databaseConfig;
+    private ItemManager itemManager;
 
     @Override
     public void onEnable() {
@@ -30,9 +33,23 @@ public class AuctionsPlugin extends JavaPlugin {
 
         messagesConfig = new MessagesConfig(this);
         databaseConfig = new DatabaseConfig(this);
+
+        itemManager = new SQLItemManager(this);
     }
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    public MessagesConfig getMessagesConfig() {
+        return messagesConfig;
+    }
+
+    public DatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
+    }
+
+    public ItemManager getItemManager() {
+        return itemManager;
     }
 }
