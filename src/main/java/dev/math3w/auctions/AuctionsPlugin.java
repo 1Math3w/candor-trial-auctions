@@ -1,5 +1,6 @@
 package dev.math3w.auctions;
 
+import dev.math3w.auctions.commands.AuctionsCommand;
 import me.zort.containr.Containr;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -20,6 +21,8 @@ public class AuctionsPlugin extends JavaPlugin {
         Containr.init(this);
 
         economy = rsp.getProvider();
+
+        getCommand("auction").setExecutor(new AuctionsCommand(this));
     }
 
     public Economy getEconomy() {
